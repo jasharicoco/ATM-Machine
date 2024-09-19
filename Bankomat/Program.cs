@@ -14,7 +14,7 @@ namespace Bankomat
 
             bool loginSuccessful = false;
             int numberOfTries = 0;
-            string loggedInUser = ""; //This will represent the name of our logged in user
+            string loggedInUser = ""; // This will represent the name of our logged in user
 
             while (!loginSuccessful && numberOfTries < 3)
             {
