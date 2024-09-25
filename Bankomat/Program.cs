@@ -60,6 +60,15 @@ namespace Bankomat
                 }
             }
 
+            int userIndex = 0; // Index for our logged in user
+            for (int i = 0; i < usernames.Length; i++)
+            {
+                if (loggedInUser == usernames[i])
+                {
+                    userIndex = i; break;
+                }
+            }
+
             Console.WriteLine($"\nAccess granted!\nWelcome, {loggedInUser}.");
             ShowMenu();
 
@@ -69,13 +78,20 @@ namespace Bankomat
                 Int32.TryParse(Console.ReadLine(), out int choice);
                 switch (choice)
                 {
-                    case 1: break;
+                    case 1:
+                        Console.WriteLine("\nThese are your accounts and their respective balances.");
+                        Console.WriteLine($"Checking account: {accounts[userIndex, 0]}");
+                        Console.WriteLine($"Savings account: {accounts[userIndex, 1]}");
+                        Console.WriteLine($"Brokerage account: {accounts[userIndex, 2]}");
+                        break;
+                    case 2:
+                        break;
 
-                    case 2: break;
+                    case 3:
+                        break;
 
-                    case 3: break;
-
-                    case 4: break;
+                    case 4:
+                        break;
 
                     default: Console.WriteLine("Choose one of the above."); ; break;
                 }
