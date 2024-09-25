@@ -80,10 +80,11 @@ namespace Bankomat
                 {
                     case 1:
                         Console.WriteLine("\nThese are your accounts and their respective balances.");
-                        Console.WriteLine($"Checking account: {accounts[userIndex, 0]}");
-                        Console.WriteLine($"Savings account: {accounts[userIndex, 1]}");
-                        Console.WriteLine($"Brokerage account: {accounts[userIndex, 2]}");
+                        Console.WriteLine($"Checking account: {accounts[userIndex, 0].ToString("C")}");
+                        Console.WriteLine($"Savings account: {accounts[userIndex, 1].ToString("C")}");
+                        Console.WriteLine($"Brokerage account: {accounts[userIndex, 2].ToString("C")}");
                         break;
+
                     case 2:
                         break;
 
@@ -93,7 +94,8 @@ namespace Bankomat
                     case 4:
                         break;
 
-                    default: Console.WriteLine("Choose one of the above."); ; break;
+                    default: Console.WriteLine("Choose one of the above.");
+                        break;
                 }
             }
         }
@@ -108,6 +110,3 @@ namespace Bankomat
         }
     }
 }
-
-// CODE THAT WILL BE USEFUL LATER
-// Console.WriteLine(accounts[0, 1].ToString("C")); // show value in currency
