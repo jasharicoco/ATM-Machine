@@ -10,6 +10,16 @@ namespace Bankomat
             string[] usernames = { "user1", "user2", "user3", "user4", "user5" };
             string[] passwords = { "password1", "password2", "password3", "password4", "password5" };
 
+            // ACCOUNTS & BALANCE STORAGE
+            decimal[,] accounts =
+            {
+                { 1000, 2000, 3000 }, //user1 accounts
+                { 1000, 2000, 3000 }, //user2 accounts
+                { 1000, 2000, 3000 }, //user3 accounts
+                { 1000, 2000, 3000 }, //user4 accounts
+                { 1000, 2000, 3000 }  //user5 accounts
+            };
+
             Console.WriteLine("Dear customer. Welcome to our ATM Machine.");
 
             bool loginSuccessful = false;
@@ -28,7 +38,8 @@ namespace Bankomat
                 // CHECK COMPATIBILITY
                 for (int i = 0; i < usernames.Length; i++)
                 {
-                    if (usernames[i].ToUpper() == username_input.ToUpper() && passwords[i].ToUpper() == password_input.ToUpper())
+                    // Password is case-sensitive while username is not.
+                    if (usernames[i].ToUpper() == username_input.ToUpper() && passwords[i] == password_input)
                     {
                         loggedInUser = usernames[i];
                         loginSuccessful = true;
@@ -51,9 +62,27 @@ namespace Bankomat
 
             Console.WriteLine($"\nAccess granted!\nWelcome, {loggedInUser}.");
             ShowMenu();
+
+            bool menu = true;
+            while (menu)
+            {
+                Int32.TryParse(Console.ReadLine(), out int choice);
+                switch (choice)
+                {
+                    case 1: break;
+
+                    case 2: break;
+
+                    case 3: break;
+
+                    case 4: break;
+
+                    default: Console.WriteLine("Choose one of the above."); ; break;
+                }
+            }
         }
 
-        // MODULE STORAGE
+        // METHOD STORAGE
         static void ShowMenu()
         {
             Console.WriteLine("\n1. See accounts and balance");
@@ -63,3 +92,6 @@ namespace Bankomat
         }
     }
 }
+
+// CODE THAT WILL BE USEFUL LATER
+// Console.WriteLine(accounts[0, 1].ToString("C")); // show value in currency
