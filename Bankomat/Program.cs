@@ -28,7 +28,8 @@ namespace Bankomat
                 // CHECK COMPATIBILITY
                 for (int i = 0; i < usernames.Length; i++)
                 {
-                    if (usernames[i].ToUpper() == username_input.ToUpper() && passwords[i].ToUpper() == password_input.ToUpper())
+                    // Password is case-sensitive while username is not.
+                    if (usernames[i].ToUpper() == username_input.ToUpper() && passwords[i] == password_input)
                     {
                         loggedInUser = usernames[i];
                         loginSuccessful = true;
