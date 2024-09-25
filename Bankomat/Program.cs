@@ -20,7 +20,6 @@ namespace Bankomat
                 { 1000, 2000, 3000 }  //user5 accounts
             };
 
-
             Console.WriteLine("Dear customer. Welcome to our ATM Machine.");
 
             bool loginSuccessful = false;
@@ -63,6 +62,24 @@ namespace Bankomat
 
             Console.WriteLine($"\nAccess granted!\nWelcome, {loggedInUser}.");
             ShowMenu();
+
+            bool menu = true;
+            while (menu)
+            {
+                Int32.TryParse(Console.ReadLine(), out int choice);
+                switch (choice)
+                {
+                    case 1: break;
+
+                    case 2: break;
+
+                    case 3: break;
+
+                    case 4: break;
+
+                    default: Console.WriteLine("Choose one of the above."); ; break;
+                }
+            }
         }
 
         // METHOD STORAGE
@@ -76,5 +93,5 @@ namespace Bankomat
     }
 }
 
-// Saving code that will be useful along the way
-// Console.WriteLine(accounts[0, 1].ToString("C")); (show value in currency)
+// CODE THAT WILL BE USEFUL LATER
+// Console.WriteLine(accounts[0, 1].ToString("C")); // show value in currency
