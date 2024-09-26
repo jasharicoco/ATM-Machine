@@ -13,29 +13,29 @@ namespace Bankomat
             // ACCOUNTS & BALANCE STORAGE
             object[,,] accounts = {
             { // user1 accounts and balances
-                { "Checking account", 1000 },
-                { "Savings account", 2000 },
-                { "Brokerage account", 3000 },
+                { "CHECKING ACCOUNT", 1000 },
+                { "SAVINGS ACCCOUNT", 2000 },
+                { "BROKERAGE ACCOUNT", 3000 },
             },
             { // user2 accounts and balances
-                { "Checking account", 1000 },
-                { "Savings account", 2000 },
-                { "Brokerage account", 3000 },
+                { "CHECKING ACCOUNT", 1000 },
+                { "SAVINGS ACCCOUNT", 2000 },
+                { "BROKERAGE ACCOUNT", 3000 },
             },
             { // user3 accounts and balances
-                { "Checking account", 1000 },
-                { "Savings account", 2000 },
-                { "Brokerage account", 3000 },
+                { "CHECKING ACCOUNT", 1000 },
+                { "SAVINGS ACCCOUNT", 2000 },
+                { "BROKERAGE ACCOUNT", 3000 },
             },
             { // user4 accounts and balances
-                { "Checking account", 1000 },
-                { "Savings account", 2000 },
-                { "Brokerage account", 3000 },
+                { "CHECKING ACCOUNT", 1000 },
+                { "SAVINGS ACCCOUNT", 2000 },
+                { "BROKERAGE ACCOUNT", 3000 },
             },
             { // user5 accounts and balances
-                { "Checking account", 1000 },
-                { "Savings account", 2000 },
-                { "Brokerage account", 3000 },
+                { "CHECKING ACCOUNT", 1000 },
+                { "SAVINGS ACCCOUNT", 2000 },
+                { "BROKERAGE ACCOUNT", 3000 },
             },
             };
 
@@ -98,11 +98,6 @@ namespace Bankomat
                 switch (choice)
                 {
                     case 1:
-                        ShowAccountsAndBalances(accounts, userIndex);
-                        ShowMenu();
-                        break;
-
-                    case 2:
                         ShowAccountsAndBalances(accounts, userIndex);
                         Console.WriteLine("\nWould you like to make an internal transaction?\n1. Yes\n2. No");
                         bool transactionLoop = false;
@@ -170,10 +165,10 @@ namespace Bankomat
                         }
                         break;
 
-                    case 3:
+                    case 2:
                         break;
 
-                    case 4:
+                    case 3:
                         menu = false;
                         Console.WriteLine("Welcome back.\nPress any key to continue.");
                         Console.ReadKey();
@@ -189,10 +184,9 @@ namespace Bankomat
         // METHOD STORAGE
         static void ShowMenu()
         {
-            Console.WriteLine("\n1. See accounts and balance");
-            Console.WriteLine("2. Internal transaction (from one of your accounts to another)");
-            Console.WriteLine("3. Withdrawal of funds");
-            Console.WriteLine("4. Log out");
+            Console.WriteLine("\n1. See account and balances and/or make internal transaction");
+            Console.WriteLine("2. Withdrawal of funds");
+            Console.WriteLine("3. Log out");
         }
         static void ShowAccountsAndBalances(object[,,] accounts, int userIndex)
         {
