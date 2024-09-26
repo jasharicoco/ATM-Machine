@@ -99,7 +99,6 @@ namespace Bankomat
                 {
                     case 1:
                         ShowAccountsAndBalances(accounts, userIndex);
-                        Console.WriteLine("");
                         ShowMenu();
                         break;
 
