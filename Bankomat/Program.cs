@@ -103,6 +103,71 @@ namespace Bankomat
                         break;
 
                     case 2:
+                        ShowAccountsAndBalances(accounts, userIndex);
+                        Console.WriteLine("\nWould you like to make an internal transaction?\n1. Yes\n2. No");
+                        bool transactionLoop = false;
+                        while (!transactionLoop)
+                        {
+                            Int32.TryParse(Console.ReadLine(), out int transactionChoice);
+                            switch (transactionChoice)
+                            {
+                                case 1:
+                                    bool transaction = false;
+                                    while (!transaction)
+                                    {
+                                        Console.WriteLine("\nFrom which account would you like to draw money?" +
+                                            "\nChoose account 1, 2 or 3.");
+                                        if (Int32.TryParse(Console.ReadLine(), out int fromAccount) && fromAccount >= 1 && fromAccount <= 3)
+                                        {
+                                            Console.WriteLine("\nTo which account would you like to send money?" +
+                                                "\nChoose account 1,2 or 3.");
+                                            if (Int32.TryParse(Console.ReadLine(), out int toAccount) && toAccount >= 1 && toAccount <= 3)
+                                            {
+                                                if (fromAccount == toAccount)
+                                                {
+                                                    Console.WriteLine("\nYou cannot make a transaction from/to the same account. Try again.");
+                                                }
+                                                else
+                                                {
+                                                    Console.WriteLine("\nHow much would you like to transfer?");
+                                                    if (Int32.TryParse(Console.ReadLine(), out int amount) && amount > 0)
+                                                    {
+                                                        if ((int)accounts[userIndex, fromAccount - 1, 1] >= amount)
+                                                        {
+                                                            accounts[userIndex, fromAccount - 1, 1] = (int)accounts[userIndex, fromAccount - 1, 1] - amount;
+                                                            accounts[userIndex, toAccount - 1, 1] = (int)accounts[userIndex, toAccount - 1, 1] + amount;
+
+                                                            ShowAccountsAndBalances(accounts, userIndex);
+                                                            transaction = true;
+                                                            transactionLoop = true;
+                                                        }
+                                                        else
+                                                        {
+                                                            Console.WriteLine("\nInsufficient funds in the selected account. Try again.");
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        Console.WriteLine("\nEnter a valid amount.");
+                                                    }
+                                                }
+                                            }
+                                            else
+                                            { Console.WriteLine("\nChoose a valid number."); }
+                                        }
+                                        else
+                                        { Console.WriteLine("\nChoose a valid number."); }
+                                    }
+                                    break;
+
+                                case 2:
+                                    ShowMenu();
+                                    transactionLoop = true;
+                                    break;
+
+                                default: Console.WriteLine("\nChoose one of the above."); break;
+                            }
+                        }
                         break;
 
                     case 3:
@@ -115,7 +180,7 @@ namespace Bankomat
                         break;
 
                     default:
-                        Console.WriteLine("Choose one of the above.");
+                        Console.WriteLine("\nChoose one of the above.");
                         break;
                 }
             }
@@ -129,13 +194,12 @@ namespace Bankomat
             Console.WriteLine("3. Withdrawal of funds");
             Console.WriteLine("4. Log out");
         }
-
         static void ShowAccountsAndBalances(object[,,] accounts, int userIndex)
         {
             Console.WriteLine("\nThese are your accounts and their respective balances.");
             for (int i = 0; i < 3; i++)
             {
-                Console.WriteLine($"{accounts[userIndex, i, 0]} {accounts[userIndex, i, 1]}");
+                Console.WriteLine($"{i + 1}. {accounts[userIndex, i, 0]} {accounts[userIndex, i, 1]}");
             }
         }
     }
