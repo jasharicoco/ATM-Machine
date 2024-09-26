@@ -7,17 +7,36 @@ namespace Bankomat
         static void Main(string[] args)
         {
             // USERNAME AND PASSWORD STORAGE
-            string[] usernames = { "user1", "user2", "user3", "user4", "user5" };
-            string[] passwords = { "password1", "password2", "password3", "password4", "password5" };
+            string[] usernames = { "a", "user2", "user3", "user4", "user5" };
+            string[] passwords = { "a", "password2", "password3", "password4", "password5" };
 
             // ACCOUNTS & BALANCE STORAGE
-            decimal[,] accounts =
-            {
-                { 1000, 2000, 3000 }, //user1 accounts
-                { 1000, 2000, 3000 }, //user2 accounts
-                { 1000, 2000, 3000 }, //user3 accounts
-                { 1000, 2000, 3000 }, //user4 accounts
-                { 1000, 2000, 3000 }  //user5 accounts
+            object[,,] accounts = {
+            { // user1 accounts and balances
+                { "Checking account", 1000 },
+                { "Savings account", 2000 },
+                { "Brokerage account", 3000 },
+            },
+            { // user2 accounts and balances
+                { "Checking account", 1000 },
+                { "Savings account", 2000 },
+                { "Brokerage account", 3000 },
+            },
+            { // user3 accounts and balances
+                { "Checking account", 1000 },
+                { "Savings account", 2000 },
+                { "Brokerage account", 3000 },
+            },
+            { // user4 accounts and balances
+                { "Checking account", 1000 },
+                { "Savings account", 2000 },
+                { "Brokerage account", 3000 },
+            },
+            { // user5 accounts and balances
+                { "Checking account", 1000 },
+                { "Savings account", 2000 },
+                { "Brokerage account", 3000 },
+            },
             };
 
             Console.WriteLine("Dear customer. Welcome to our ATM Machine.");
@@ -79,10 +98,9 @@ namespace Bankomat
                 switch (choice)
                 {
                     case 1:
-                        Console.WriteLine("\nThese are your accounts and their respective balances.");
-                        Console.WriteLine($"Checking account: {accounts[userIndex, 0].ToString("C")}");
-                        Console.WriteLine($"Savings account: {accounts[userIndex, 1].ToString("C")}");
-                        Console.WriteLine($"Brokerage account: {accounts[userIndex, 2].ToString("C")}");
+                        ShowAccountsAndBalances(accounts, userIndex);
+                        Console.WriteLine("");
+                        ShowMenu();
                         break;
 
                     case 2:
@@ -92,9 +110,13 @@ namespace Bankomat
                         break;
 
                     case 4:
+                        menu = false;
+                        Console.WriteLine("Welcome back.\nPress any key to continue.");
+                        Console.ReadKey();
                         break;
 
-                    default: Console.WriteLine("Choose one of the above.");
+                    default:
+                        Console.WriteLine("Choose one of the above.");
                         break;
                 }
             }
@@ -107,6 +129,15 @@ namespace Bankomat
             Console.WriteLine("2. Internal transaction (from one of your accounts to another)");
             Console.WriteLine("3. Withdrawal of funds");
             Console.WriteLine("4. Log out");
+        }
+
+        static void ShowAccountsAndBalances(object[,,] accounts, int userIndex)
+        {
+            Console.WriteLine("\nThese are your accounts and their respective balances.");
+            for (int i = 0; i < 3; i++)
+            {
+                Console.WriteLine($"{accounts[userIndex, i, 0]} {accounts[userIndex, i, 1]}");
+            }
         }
     }
 }
