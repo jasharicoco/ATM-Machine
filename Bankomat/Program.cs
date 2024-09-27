@@ -100,8 +100,8 @@ namespace Bankomat
                     case 1:
                         ShowAccountsAndBalances(accounts, userIndex);
                         Console.WriteLine("\nWould you like to make an internal transaction?\n1. Yes\n2. No");
-                        bool transactionLoop = false;
-                        while (!transactionLoop)
+                        bool transactionLoop = true;
+                        while (transactionLoop)
                         {
                             Int32.TryParse(Console.ReadLine(), out int transactionChoice);
                             switch (transactionChoice)
@@ -134,7 +134,7 @@ namespace Bankomat
 
                                                             ShowAccountsAndBalances(accounts, userIndex);
                                                             transaction = true;
-                                                            transactionLoop = true;
+                                                            transactionLoop = false;
                                                         }
                                                         else
                                                         {
@@ -153,11 +153,13 @@ namespace Bankomat
                                         else
                                         { Console.WriteLine("\nChoose a valid number."); }
                                     }
+                                    ShowMenu();
+                                    transactionLoop = false;
                                     break;
 
                                 case 2:
                                     ShowMenu();
-                                    transactionLoop = true;
+                                    transactionLoop = false;
                                     break;
 
                                 default: Console.WriteLine("\nChoose one of the above."); break;
