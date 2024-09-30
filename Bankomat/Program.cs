@@ -18,7 +18,7 @@ namespace Bankomat
                 { "BROKERAGE ACCOUNT", 3000 },
             },
             { // user2 accounts and balances
-                { "CHECKING ACCOUNT", 1000 },
+                { "CHECKING ACCOUNT", 42000 },
                 { "SAVINGS ACCCOUNT", 2000 },
                 { "BROKERAGE ACCOUNT", 3000 },
             },
@@ -208,6 +208,8 @@ namespace Bankomat
                         // Perform the transaction
                         accounts[userIndex, fromAccount - 1, 1] = (int)accounts[userIndex, fromAccount - 1, 1] - amount;
                         accounts[userIndex, toAccount - 1, 1] = (int)accounts[userIndex, toAccount - 1, 1] + amount;
+
+                        Console.WriteLine("\nTransaction successful.");
 
                         ShowAccountsAndBalances(accounts, userIndex);
                         break; // Leave loop when transaction is successful
