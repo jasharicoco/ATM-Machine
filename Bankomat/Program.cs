@@ -126,45 +126,7 @@ namespace Bankomat
                         break;
 
                     case 2:
-                        ShowAccountsAndBalances(accounts, userIndex);
-                        Console.WriteLine("\nFrom which account would you like to make a withdrawal?");
-                        bool withdrawal = false;
-                        while (!withdrawal)
-                        {
-                            Int32.TryParse(Console.ReadLine(), out int withdrawalAccount);
-                            switch (withdrawalAccount)
-                            {
-                                case 1:
-                                    Console.WriteLine("\nHow much would you like to withdraw?");
-                                    if (!Int32.TryParse(Console.ReadLine(), out int withdrawalAmount) || withdrawalAmount < 0)
-                                    {
-                                        Console.WriteLine("Enter a valid amount.");
-                                        continue;
-                                    }
-
-                                    if (withdrawalAmount > (int)accounts[userIndex, withdrawalAccount - 1, 1])
-                                    {
-                                        Console.WriteLine("\nInsufficient funds on account. Try again");
-                                        continue;
-                                    }
-
-                                    accounts[userIndex, withdrawalAccount - 1, 1] = (int)accounts[userIndex, withdrawalAccount - 1, 1] - withdrawalAmount;
-
-                                    Console.WriteLine("\nWithdrawal successful.");
-
-                                    ShowAccountsAndBalances(accounts, userIndex);
-
-                                    break;
-                                case 2:
-                                    break;
-                                case 3:
-                                    break;
-
-                                default:
-                                    Console.WriteLine("\nChoose one of the above.");
-                                    break;
-                            }
-                        }
+                        MakeWithdrawal(accounts, userIndex);
                         break;
 
                     case 3:
@@ -266,5 +228,38 @@ namespace Bankomat
                 }
             }
         }
+        static void MakeWithdrawal(object[,,] accounts, int userIndex)
+        {
+            ShowAccountsAndBalances(accounts, userIndex);
+            Console.WriteLine("\nFrom which account would you like to make a withdrawal?");
+            bool withdrawal = false;
+            while (!withdrawal)
+            {
+                if (Int32.TryParse(Console.ReadLine(), out int withdrawalAccount) && withdrawalAccount >= 1 && withdrawalAccount <= 3)
+                {
+                    Console.WriteLine("\nHow much would you like to withdraw?");
+
+                    if (!Int32.TryParse(Console.ReadLine(), out int withdrawalAmount) || withdrawalAmount < 0)
+                    {
+                        Console.WriteLine("Enter a valid amount.");
+                    }
+
+                    else if (withdrawalAmount > (int)accounts[userIndex, withdrawalAccount - 1, 1])
+                    {
+                        Console.WriteLine("\nInsufficient funds on account.\nTry again (choose account to withdraw from).");
+                    }
+
+                    else
+                    {
+                        accounts[userIndex, withdrawalAccount - 1, 1] = (int)accounts[userIndex, withdrawalAccount - 1, 1] - withdrawalAmount;
+                        Console.WriteLine("\nWithdrawal successful.");
+                        ShowAccountsAndBalances(accounts, userIndex);
+                        ShowMenu();
+                        withdrawal = true;
+                    }
+                }
+                else { Console.WriteLine("\nChoose one of your accounts."); }
+        }
     }
+}
 }
