@@ -1,4 +1,5 @@
 ﻿using System.Reflection.Metadata;
+using System.Runtime;
 
 namespace Bankomat
 {
@@ -125,6 +126,45 @@ namespace Bankomat
                         break;
 
                     case 2:
+                        ShowAccountsAndBalances(accounts, userIndex);
+                        Console.WriteLine("\nFrom which account would you like to make a withdrawal?");
+                        bool withdrawal = false;
+                        while (!withdrawal)
+                        {
+                            Int32.TryParse(Console.ReadLine(), out int withdrawalAccount);
+                            switch (withdrawalAccount)
+                            {
+                                case 1:
+                                    Console.WriteLine("\nHow much would you like to withdraw?");
+                                    if (!Int32.TryParse(Console.ReadLine(), out int withdrawalAmount) || withdrawalAmount < 0)
+                                    {
+                                        Console.WriteLine("Enter a valid amount.");
+                                        continue;
+                                    }
+
+                                    if (withdrawalAmount > (int)accounts[userIndex, withdrawalAccount - 1, 1])
+                                    {
+                                        Console.WriteLine("\nInsufficient funds on account. Try again");
+                                        continue;
+                                    }
+
+                                    accounts[userIndex, withdrawalAccount - 1, 1] = (int)accounts[userIndex, withdrawalAccount - 1, 1] - withdrawalAmount;
+
+                                    Console.WriteLine("\nWithdrawal successful.");
+
+                                    ShowAccountsAndBalances(accounts, userIndex);
+
+                                    break;
+                                case 2:
+                                    break;
+                                case 3:
+                                    break;
+
+                                default:
+                                    Console.WriteLine("\nChoose one of the above.");
+                                    break;
+                            }
+                        }
                         break;
 
                     case 3:
