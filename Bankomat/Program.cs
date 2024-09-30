@@ -1,5 +1,6 @@
 ﻿using System.Reflection.Metadata;
 using System.Runtime;
+using System.Security.Principal;
 
 namespace Bankomat
 {
@@ -186,6 +187,7 @@ namespace Bankomat
                             if (input.ToUpper() == "EXIT")
                             {
                                 Console.WriteLine("\nTransaction cancelled. Returning to menu.");
+                                ShowMenu();
                                 return;
                             }
 
@@ -198,7 +200,7 @@ namespace Bankomat
                                     accounts[userIndex, fromAccount - 1, 1] = (int)accounts[userIndex, fromAccount - 1, 1] - amount;
                                     accounts[userIndex, toAccount - 1, 1] = (int)accounts[userIndex, toAccount - 1, 1] + amount;
 
-                                    Console.WriteLine("\nTransaction successful.");
+                                    Console.WriteLine("\nTRANSACTION SUCCESSFUL.");
 
                                     ShowAccountsAndBalances(accounts, userIndex);
                                     break; // Leave loop when transaction is successful
@@ -232,35 +234,61 @@ namespace Bankomat
 
         static void MakeWithdrawal(object[,,] accounts, int userIndex)
         {
+            int fromAccount = 0;
+            int amount = 0;
+
             ShowAccountsAndBalances(accounts, userIndex);
-            Console.WriteLine("\nFrom which account would you like to make a withdrawal?");
-            bool withdrawal = false;
-            while (!withdrawal)
+            bool withdrawalLoop = true;
+            while (withdrawalLoop)
             {
-                if (Int32.TryParse(Console.ReadLine(), out int withdrawalAccount) && withdrawalAccount >= 1 && withdrawalAccount <= 3)
+                // Select account to withdraw from
+                while (true)
                 {
-                    Console.WriteLine("\nHow much would you like to withdraw?");
-
-                    if (!Int32.TryParse(Console.ReadLine(), out int withdrawalAmount) || withdrawalAmount < 0)
+                    Console.WriteLine("\nFrom which account would you like to make a withdrawal?");
+                    if (Int32.TryParse(Console.ReadLine(), out fromAccount) && fromAccount >= 1 && fromAccount <= 3)
                     {
-                        Console.WriteLine("Enter a valid amount.");
+                        break; // Leave loop with correct input
+                    }
+                    Console.WriteLine("Choose a valid account.");
+                }
+
+                while (true)
+                {
+                    Console.WriteLine("\nHow much would you like to transfer?");
+                    string input = Console.ReadLine();
+
+                    if (input.ToUpper() == "EXIT")
+                    {
+                        Console.WriteLine("\nTransaction cancelled. Returning to menu.");
+                        ShowMenu();
+                        return;
                     }
 
-                    else if (withdrawalAmount > (int)accounts[userIndex, withdrawalAccount - 1, 1])
+                    if (Int32.TryParse(input, out amount) && amount > 0)
                     {
-                        Console.WriteLine("\nInsufficient funds on account.\nTry again (choose account to withdraw from).");
-                    }
+                        // Check if there are sufficient funds
+                        if ((int)accounts[userIndex, fromAccount - 1, 1] >= amount)
+                        {
+                            // Perform the withdrawal
+                            accounts[userIndex, fromAccount - 1, 1] = (int)accounts[userIndex, fromAccount - 1, 1] - amount;
+                            Console.WriteLine("\nWITHDRAWAL SUCCESSFUL.");
 
+                            ShowAccountsAndBalances(accounts, userIndex);
+                            ShowMenu();
+                            withdrawalLoop = false;
+                            break; // Leave loop when transaction is successful
+                        }
+                        else
+                        {
+                            Console.WriteLine("Insufficient funds. Try again or write EXIT to cancel.");
+                            continue;
+                        }
+                    }
                     else
                     {
-                        accounts[userIndex, withdrawalAccount - 1, 1] = (int)accounts[userIndex, withdrawalAccount - 1, 1] - withdrawalAmount;
-                        Console.WriteLine("\nWithdrawal successful.");
-                        ShowAccountsAndBalances(accounts, userIndex);
-                        ShowMenu();
-                        withdrawal = true;
+                        Console.WriteLine("Enter a valid amount. Try again or write EXIT to cancel.");
                     }
                 }
-                else { Console.WriteLine("\nChoose a valid account."); }
             }
         }
     }
