@@ -47,8 +47,6 @@ namespace Bankomat
 
             Login(usernames, passwords, ref userIndex);
 
-            Console.WriteLine(userIndex);
-
             bool menu = true;
             while (menu)
             {
@@ -111,7 +109,7 @@ namespace Bankomat
                 // THREE WRONG ENTRIES
                 if (numberOfTries == 3 && true)
                 {
-                    Console.WriteLine("You have tried too many times. Come back when you're sober.");
+                    Console.WriteLine("Come back when you're sober.");
                     Environment.Exit(0); // Consequence of 3 wrong entries
                 }
             }
