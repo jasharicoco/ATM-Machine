@@ -71,6 +71,10 @@ namespace Bankomat
                             break;
 
                         case 4:
+                            CrossUserTransaction(usernames, accounts, userIndex);
+                            break;
+
+                        case 5:
                             loggedin = false;
                             Console.WriteLine("\nWelcome back.\nPress any key to continue.\n");
                             Console.ReadKey();
@@ -129,7 +133,8 @@ namespace Bankomat
             Console.WriteLine("1. See account and balances and/or make internal transaction");
             Console.WriteLine("2. Withdraw funds");
             Console.WriteLine("3. Deposit funds");
-            Console.WriteLine("4. Log out");
+            Console.WriteLine("4. Send funds to another user");
+            Console.WriteLine("5. Log out");
         }
         static void ShowAccountsAndBalances(object[,,] accounts, int userIndex)
         {
@@ -137,7 +142,7 @@ namespace Bankomat
             for (int i = 0; i < 3; i++)
             {
                 decimal balance = Convert.ToDecimal(accounts[userIndex, i, 1]);
-                Console.WriteLine($"{i + 1}. {accounts[userIndex, i, 0]}: {balance:C}");
+                Console.WriteLine($"{i + 1}: {accounts[userIndex, i, 0]}: {balance:C}");
             }
         }
         static void Transaction(object[,,] accounts, int userIndex)
@@ -198,7 +203,7 @@ namespace Bankomat
                     accounts[userIndex, fromAccount - 1, 1] = fromBalance - amount;
                     accounts[userIndex, toAccount - 1, 1] = toBalance + amount;
 
-                    Console.WriteLine("\nTransaction successful. These are you new balances.\n");
+                    Console.WriteLine("\nTransaction successful. These are you new balances.");
 
                     ShowAccountsAndBalances(accounts, userIndex);
                 }
@@ -302,6 +307,66 @@ namespace Bankomat
                         Console.WriteLine("Enter a valid amount. Try again or write EXIT to cancel.");
                     }
                 }
+            }
+        }
+        static void CrossUserTransaction(string[] usernames, object[,,] accounts, int userIndex)
+        {
+            int fromAccount = 0;
+            int toUser = 0;
+            int toAccount = 0;
+            decimal amount = 0;
+
+            Console.WriteLine("\nTo which user would you like to send money?");
+            for (int i = 0; i < usernames.Length; i++)
+            {
+                Console.WriteLine($"{i + 1}: {usernames[i]}");
+            }
+
+            while (!Int32.TryParse(Console.ReadLine(), out toUser) || toUser < 1 || toUser > usernames.Length)
+            {
+                Console.WriteLine("Choose a valid user.");
+            }
+
+            Console.WriteLine("\nTo which account would you like to transfer the money?");
+            for (int i = 0; i < 3; i++)
+            {
+                Console.WriteLine($"{i + 1}: {accounts[toUser - 1, i, 0]}");
+            }
+
+            while (!Int32.TryParse(Console.ReadLine(), out toAccount) || toAccount < 1 || toAccount > accounts.Length)
+            {
+                Console.WriteLine("Choose a valid account.");
+            }
+
+
+            ShowAccountsAndBalances(accounts, userIndex);
+            Console.WriteLine("\nFrom which account would you like to draw money?");
+            while (!Int32.TryParse(Console.ReadLine(), out fromAccount) || fromAccount < 1 || fromAccount > accounts.Length)
+            {
+                Console.WriteLine("Choose a valid account.");
+            }
+
+            Console.WriteLine("\nHow much would you like to transfer?");
+            while (!decimal.TryParse(Console.ReadLine(), out amount) || amount <= 0)
+            {
+                Console.WriteLine("Enter a valid amount.");
+            }
+
+            if ((decimal)accounts[userIndex, fromAccount - 1, 1] < amount)
+            {
+                Console.WriteLine("\nInsufficient funds in the selected account. Try again.");
+            }
+            else
+            {
+                // Perform the transaction
+                decimal fromBalance = (decimal)accounts[userIndex, fromAccount - 1, 1];
+                decimal toBalance = (decimal)accounts[toUser - 1, toAccount - 1, 1];
+                accounts[userIndex, fromAccount - 1, 1] = fromBalance - amount;
+                accounts[toUser - 1, toAccount - 1, 1] = toBalance + amount;
+
+                Console.WriteLine("\nTransaction successful. These are you new balances.");
+
+                ShowAccountsAndBalances(accounts, userIndex);
             }
         }
     }
