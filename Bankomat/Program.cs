@@ -43,34 +43,39 @@ namespace Bankomat
 
             int userIndex = 0; // This will represent the index of our logged in user
 
-            Console.WriteLine("Dear customer. Welcome to our ATM Machine.");
-
-            Login(usernames, passwords, ref userIndex);
-
-            bool menu = true;
-            while (menu)
+            bool program = true;
+            while (program)
             {
-                ShowMenu();
-                Int32.TryParse(Console.ReadLine(), out int choice);
-                switch (choice)
+                Console.WriteLine("");
+                Console.WriteLine("\x1b[1mDear customer. Welcome to our ATM Machine.\x1b[0m");
+
+                Login(usernames, passwords, ref userIndex);
+
+                bool loggedin = true;
+                while (loggedin)
                 {
-                    case 1:
-                        Transaction(accounts, userIndex);
-                        break;
+                    ShowMenu();
+                    Int32.TryParse(Console.ReadLine(), out int choice);
+                    switch (choice)
+                    {
+                        case 1:
+                            Transaction(accounts, userIndex);
+                            break;
 
-                    case 2:
-                        MakeWithdrawal(accounts, userIndex);
-                        break;
+                        case 2:
+                            MakeWithdrawal(accounts, userIndex);
+                            break;
 
-                    case 3:
-                        menu = false;
-                        Console.WriteLine("Welcome back.\nPress any key to continue.");
-                        Console.ReadKey();
-                        break;
+                        case 3:
+                            loggedin = false;
+                            Console.WriteLine("Welcome back.\nPress any key to continue.\n");
+                            Console.ReadKey();
+                            break;
 
-                    default:
-                        Console.WriteLine("\nChoose one of the above.");
-                        break;
+                        default:
+                            Console.WriteLine("\nChoose one of the above.");
+                            break;
+                    }
                 }
             }
         }
@@ -97,14 +102,14 @@ namespace Bankomat
                     {
                         userIndex = i; // Store the user index
                         Console.WriteLine($"\nAccess granted!\nWelcome, {usernames[i]}.");
-                        
+
                         return; // Exit the method on successful login
                     }
                 }
 
                 // WRONG COMBINATION
-                    numberOfTries++;
-                    Console.WriteLine($"Incorrect username or password combination. {numberOfTries}/3 tries.");
+                numberOfTries++;
+                Console.WriteLine($"Incorrect username or password combination. {numberOfTries}/3 tries.");
 
                 // THREE WRONG ENTRIES
                 if (numberOfTries == 3 && true)
@@ -116,8 +121,9 @@ namespace Bankomat
         }
         static void ShowMenu()
         {
-            Console.WriteLine("\n1. See account and balances and/or make internal transaction");
-            Console.WriteLine("2. Withdrawal of funds");
+            Console.WriteLine("\nWhat would you like to do?");
+            Console.WriteLine("1. See account and balances and/or make internal transaction");
+            Console.WriteLine("2. Withdraw funds");
             Console.WriteLine("3. Log out");
         }
         static void ShowAccountsAndBalances(object[,,] accounts, int userIndex)
