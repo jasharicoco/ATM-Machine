@@ -138,11 +138,11 @@ namespace Bankomat
         {
             ShowAccountsAndBalances(accounts, userIndex);
             Console.WriteLine("\nWould you like to make an internal transaction?\n1. Yes\n2. No");
+            int transactionChoice = 0;
 
-            if (!Int32.TryParse(Console.ReadLine(), out int transactionChoice) || transactionChoice < 1 || transactionChoice > 2)
+            while (!Int32.TryParse(Console.ReadLine(), out transactionChoice) || transactionChoice < 1 || transactionChoice > 2)
             {
                 Console.WriteLine("\nChoose one of the above.");
-                return; // Exit the method if input is invalid
             }
 
             if (transactionChoice == 2)
