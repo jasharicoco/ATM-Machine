@@ -15,29 +15,29 @@ namespace Bankomat
             // ACCOUNTS & BALANCE STORAGE
             object[,,] accounts = {
             { // user1 accounts and balances
-                { "CHECKING ACCOUNT", 22322,78 },
-                { "SAVINGS ACCCOUNT", 120000,12 },
-                { "BROKERAGE ACCOUNT", 80000,00 },
+                { "CHECKING ACCOUNT", 22322.78m },
+                { "SAVINGS ACCCOUNT", 120000.12m },
+                { "BROKERAGE ACCOUNT", 80000.00m },
             },
             { // user2 accounts and balances
-                { "CHECKING ACCOUNT", 14720,02 },
-                { "SAVINGS ACCCOUNT", 40000,00 },
-                { "BROKERAGE ACCOUNT", 140800,20 },
+                { "CHECKING ACCOUNT", 14720.02m },
+                { "SAVINGS ACCCOUNT", 40000.00m },
+                { "BROKERAGE ACCOUNT", 140800.20m },
             },
             { // user3 accounts and balances
-                { "CHECKING ACCOUNT", 42420,42 },
-                { "SAVINGS ACCCOUNT", 18292,00 },
-                { "BROKERAGE ACCOUNT", 19020,02 },
+                { "CHECKING ACCOUNT", 42420.42m },
+                { "SAVINGS ACCCOUNT", 18292.00m },
+                { "BROKERAGE ACCOUNT", 19020.02m },
             },
             { // user4 accounts and balances
-                { "CHECKING ACCOUNT", 4042,02 },
-                { "SAVINGS ACCCOUNT", 8220,92 },
-                { "BROKERAGE ACCOUNT", 22180,20 },
+                { "CHECKING ACCOUNT", 4042.02m },
+                { "SAVINGS ACCCOUNT", 8220.92m },
+                { "BROKERAGE ACCOUNT", 22180.20m },
             },
             { // user5 accounts and balances
-                { "CHECKING ACCOUNT", 2420,95 },
-                { "SAVINGS ACCCOUNT", 1529,28 },
-                { "BROKERAGE ACCOUNT", 5120,20 },
+                { "CHECKING ACCOUNT", 2420.95m },
+                { "SAVINGS ACCCOUNT", 1529.28m },
+                { "BROKERAGE ACCOUNT", 5120.20m },
             },
             };
 
@@ -131,18 +131,19 @@ namespace Bankomat
             Console.WriteLine("\nThese are your accounts and their respective balances.");
             for (int i = 0; i < 3; i++)
             {
-                Console.WriteLine($"{i + 1}. {accounts[userIndex, i, 0]} {accounts[userIndex, i, 1]}");
+                decimal balance = Convert.ToDecimal(accounts[userIndex, i, 1]);
+                Console.WriteLine($"{i + 1}. {accounts[userIndex, i, 0]}: {balance:C}");
             }
         }
         static void Transaction(object[,,] accounts, int userIndex)
         {
             ShowAccountsAndBalances(accounts, userIndex);
             Console.WriteLine("\nWould you like to make an internal transaction?\n1. Yes\n2. No");
+            int transactionChoice = 0;
 
-            if (!Int32.TryParse(Console.ReadLine(), out int transactionChoice) || transactionChoice < 1 || transactionChoice > 2)
+            while (!Int32.TryParse(Console.ReadLine(), out transactionChoice) || transactionChoice < 1 || transactionChoice > 2)
             {
                 Console.WriteLine("\nChoose one of the above.");
-                return; // Exit the method if input is invalid
             }
 
             if (transactionChoice == 2)
@@ -154,7 +155,7 @@ namespace Bankomat
             {
                 int fromAccount = 0;
                 int toAccount = 0;
-                int amount = 0;
+                decimal amount = 0;
 
                 Console.WriteLine("\nFrom which account would you like to draw money?");
                 while (!Int32.TryParse(Console.ReadLine(), out fromAccount) || fromAccount < 1 || fromAccount > 3)
@@ -175,20 +176,22 @@ namespace Bankomat
                 }
 
                 Console.WriteLine("\nHow much would you like to transfer?");
-                while (!Int32.TryParse(Console.ReadLine(), out amount) || amount <= 0)
+                while (!decimal.TryParse(Console.ReadLine(), out amount) || amount <= 0)
                 {
                     Console.WriteLine("Enter a valid amount.");
                 }
 
-                if ((int)accounts[userIndex, fromAccount - 1, 1] < amount)
+                if ((decimal)accounts[userIndex, fromAccount - 1, 1] < amount)
                 {
                     Console.WriteLine("\nInsufficient funds in the selected account. Try again.");
                 }
                 else
                 {
                     // Perform the transaction
-                    accounts[userIndex, fromAccount - 1, 1] = (int)accounts[userIndex, fromAccount - 1, 1] - amount;
-                    accounts[userIndex, toAccount - 1, 1] = (int)accounts[userIndex, toAccount - 1, 1] + amount;
+                    decimal fromBalance = (decimal)accounts[userIndex, fromAccount - 1, 1];
+                    decimal toBalance = (decimal)accounts[userIndex, toAccount - 1, 1];
+                    accounts[userIndex, fromAccount - 1, 1] = fromBalance - amount;
+                    accounts[userIndex, toAccount - 1, 1] = toBalance + amount;
 
                     Console.WriteLine("\nTransaction successful. These are you new balances.\n");
 
