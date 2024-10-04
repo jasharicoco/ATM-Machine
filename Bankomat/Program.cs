@@ -67,8 +67,12 @@ namespace Bankomat
                             break;
 
                         case 3:
+                            MakeDeposit(accounts, userIndex);
+                            break;
+
+                        case 4:
                             loggedin = false;
-                            Console.WriteLine("Welcome back.\nPress any key to continue.\n");
+                            Console.WriteLine("\nWelcome back.\nPress any key to continue.\n");
                             Console.ReadKey();
                             break;
 
@@ -124,7 +128,8 @@ namespace Bankomat
             Console.WriteLine("\nWhat would you like to do?");
             Console.WriteLine("1. See account and balances and/or make internal transaction");
             Console.WriteLine("2. Withdraw funds");
-            Console.WriteLine("3. Log out");
+            Console.WriteLine("3. Deposit funds");
+            Console.WriteLine("4. Log out");
         }
         static void ShowAccountsAndBalances(object[,,] accounts, int userIndex)
         {
@@ -202,20 +207,16 @@ namespace Bankomat
         static void MakeWithdrawal(object[,,] accounts, int userIndex)
         {
             int fromAccount = 0;
-            int amount = 0;
+            decimal amount = 0;
 
             ShowAccountsAndBalances(accounts, userIndex);
             bool withdrawalLoop = true;
             while (withdrawalLoop)
             {
                 // Select account to withdraw from
-                while (true)
+                Console.WriteLine("\nFrom which account would you like to make a withdrawal?");
+                while (!Int32.TryParse(Console.ReadLine(), out fromAccount) || fromAccount < 1 || fromAccount > 3)
                 {
-                    Console.WriteLine("\nFrom which account would you like to make a withdrawal?");
-                    if (Int32.TryParse(Console.ReadLine(), out fromAccount) && fromAccount >= 1 && fromAccount <= 3)
-                    {
-                        break; // Leave loop with correct input
-                    }
                     Console.WriteLine("Choose a valid account.");
                 }
 
@@ -227,21 +228,19 @@ namespace Bankomat
                     if (input.ToUpper() == "EXIT")
                     {
                         Console.WriteLine("\nTransaction cancelled. Returning to menu.");
-                        ShowMenu();
                         return;
                     }
 
-                    if (Int32.TryParse(input, out amount) && amount > 0)
+                    if (decimal.TryParse(input, out amount) && amount > 0)
                     {
                         // Check if there are sufficient funds
-                        if ((int)accounts[userIndex, fromAccount - 1, 1] >= amount)
+                        if ((decimal)accounts[userIndex, fromAccount - 1, 1] >= amount)
                         {
                             // Perform the withdrawal
-                            accounts[userIndex, fromAccount - 1, 1] = (int)accounts[userIndex, fromAccount - 1, 1] - amount;
+                            accounts[userIndex, fromAccount - 1, 1] = (decimal)accounts[userIndex, fromAccount - 1, 1] - amount;
                             Console.WriteLine("\nWITHDRAWAL SUCCESSFUL.");
 
                             ShowAccountsAndBalances(accounts, userIndex);
-                            ShowMenu();
                             withdrawalLoop = false;
                             break; // Leave loop when transaction is successful
                         }
@@ -250,6 +249,53 @@ namespace Bankomat
                             Console.WriteLine("Insufficient funds. Try again or write EXIT to cancel.");
                             continue;
                         }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Enter a valid amount. Try again or write EXIT to cancel.");
+                    }
+                }
+            }
+        }
+        static void MakeDeposit(object[,,] accounts, int userIndex)
+        {
+            int toAccount = 0;
+            decimal amount = 0;
+
+            ShowAccountsAndBalances(accounts, userIndex);
+            bool depositLoop = true;
+            while (depositLoop)
+            {
+                // Select account to deposit to
+
+                Console.WriteLine("\nTo which account would you like to deposit funds?");
+                while (!Int32.TryParse(Console.ReadLine(), out toAccount) || toAccount < 1 || toAccount > 3)
+                {
+                    Console.WriteLine("Choose a valid account.");
+                }
+
+                while (true)
+                {
+                    Console.WriteLine("\nHow much would you like to deposit?");
+                    string input = Console.ReadLine();
+
+                    if (input.ToUpper() == "EXIT")
+                    {
+                        Console.WriteLine("\nTransaction cancelled. Returning to menu.");
+                        return;
+                    }
+
+                    if (decimal.TryParse(input, out amount) && amount > 0)
+                    {
+                        // Perform the withdrawal
+                        decimal oldBalance = (decimal)accounts[userIndex, toAccount - 1, 1];
+                        accounts[userIndex, toAccount - 1, 1] = oldBalance + amount;
+
+                        Console.WriteLine("\nDEPOSIT SUCCESSFUL.");
+
+                        ShowAccountsAndBalances(accounts, userIndex);
+                        depositLoop = false;
+                        break; // Leave loop when transaction is successful
                     }
                     else
                     {
