@@ -189,8 +189,10 @@ namespace Bankomat
                     accountBalances[userIndex][fromAccount - 1] -= amount;
                     accountBalances[userIndex][toAccount - 1] += amount;
 
-                    Console.WriteLine("\nTransaction successful. These are you new balances.");
+                    Console.WriteLine($"\nTransaction successful. {amount.ToString("C")} was sent from {accounts[userIndex][fromAccount - 1]} " +
+                        $"to {accounts[userIndex][toAccount - 1]}");
 
+                    Console.WriteLine("\nThese are you new balances.");
                     ShowAccountsAndBalances(accounts, accountBalances, userIndex);
                 }
             }
@@ -231,8 +233,10 @@ namespace Bankomat
                             {
                                 // Perform the withdrawal
                                 accountBalances[userIndex][fromAccount - 1] -= amount;
-                                Console.WriteLine("\nWITHDRAWAL SUCCESSFUL.");
 
+                                Console.WriteLine($"\nWithdrawal successful. {amount.ToString("C")} ware withdrawn from {accounts[userIndex][fromAccount - 1]}.");
+
+                                Console.WriteLine("\nThese are you new balances.");
                                 ShowAccountsAndBalances(accounts, accountBalances, userIndex);
                             }
                             withdrawalLoop = false;
@@ -284,9 +288,11 @@ namespace Bankomat
                         // Perform the withdrawal
                         accountBalances[userIndex][toAccount - 1] += amount;
 
-                        Console.WriteLine("\nDEPOSIT SUCCESSFUL.");
+                        Console.WriteLine($"\nDeposit successful. {amount.ToString("C")} were deposited to {accounts[userIndex][toAccount - 1]}.");
 
+                        Console.WriteLine("\nThese are you new balances.");
                         ShowAccountsAndBalances(accounts, accountBalances, userIndex);
+
                         depositLoop = false;
                         break; // Leave loop when transaction is successful
                     }
@@ -351,7 +357,7 @@ namespace Bankomat
                 accountBalances[userIndex][fromAccount - 1] -= amount;
                 accountBalances[toUser - 1][toAccount - 1] += amount;
 
-                Console.WriteLine($"\nTransaction successful. {amount} was sent from your {accounts[userIndex][fromAccount - 1]} " +
+                Console.WriteLine($"\nTransaction successful. {amount.ToString("C")} was sent from your {accounts[userIndex][fromAccount - 1]} " +
                     $"to {usernames[toUser - 1]}'s {accounts[toUser - 1][toAccount - 1]}.");
                 Console.WriteLine("\nThese are you new balances.");
 
