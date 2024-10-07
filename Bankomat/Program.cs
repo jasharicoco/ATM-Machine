@@ -52,7 +52,7 @@ namespace Bankomat
                             break;
 
                         case 2:
-                            MakeWithdrawal(accounts, accountBalances, userIndex);
+                            MakeWithdrawal(usernames, passwords, accounts, accountBalances, userIndex);
                             break;
 
                         case 3:
@@ -195,7 +195,7 @@ namespace Bankomat
                 }
             }
         }
-        static void MakeWithdrawal(string[][] accounts, decimal[][] accountBalances, int userIndex)
+        static void MakeWithdrawal(string[] usernames, string[] passwords, string[][] accounts, decimal[][] accountBalances, int userIndex)
         {
             int fromAccount = 0;
             decimal amount = 0;
@@ -227,11 +227,14 @@ namespace Bankomat
                         // Check if there are sufficient funds
                         if (accountBalances[userIndex][fromAccount - 1] >= amount)
                         {
-                            // Perform the withdrawal
-                            accountBalances[userIndex][fromAccount - 1] -= amount;
-                            Console.WriteLine("\nWITHDRAWAL SUCCESSFUL.");
+                            if (ConfirmPIN(usernames, passwords, userIndex))
+                            {
+                                // Perform the withdrawal
+                                accountBalances[userIndex][fromAccount - 1] -= amount;
+                                Console.WriteLine("\nWITHDRAWAL SUCCESSFUL.");
 
-                            ShowAccountsAndBalances(accounts, accountBalances, userIndex);
+                                ShowAccountsAndBalances(accounts, accountBalances, userIndex);
+                            }
                             withdrawalLoop = false;
                             break; // Leave loop when transaction is successful
                         }
