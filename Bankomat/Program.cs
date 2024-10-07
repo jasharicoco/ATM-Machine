@@ -60,7 +60,7 @@ namespace Bankomat
                             break;
 
                         case 4:
-                            CrossUserTransaction(usernames, accounts, accountBalances, userIndex);
+                            CrossUserTransaction(usernames, passwords, accounts, accountBalances, userIndex);
                             break;
 
                         case 5:
@@ -297,7 +297,7 @@ namespace Bankomat
                 }
             }
         }
-        static void CrossUserTransaction(string[] usernames, string[][] accounts, decimal[][] accountBalances, int userIndex)
+        static void CrossUserTransaction(string[] usernames, string[] passwords, string[][] accounts, decimal[][] accountBalances, int userIndex)
         {
             int fromAccount = 0;
             int toUser = 0;
@@ -344,7 +344,8 @@ namespace Bankomat
             {
                 Console.WriteLine("\nInsufficient funds in the selected account. Try again.");
             }
-            else
+
+            if (ConfirmPIN(usernames, passwords, userIndex))
             {
                 // Perform the transaction
                 accountBalances[userIndex][fromAccount - 1] -= amount;
