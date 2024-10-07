@@ -183,7 +183,7 @@ namespace Bankomat
                 {
                     Console.WriteLine("\nInsufficient funds in the selected account. Try again.");
                 }
-                else
+                if (ConfirmPIN(usernames, passwords, userIndex))
                 {
                     // Perform the transaction
                     accountBalances[userIndex][fromAccount - 1] -= amount;
@@ -358,11 +358,10 @@ namespace Bankomat
                 int numberOfTries = 0;
                 while (numberOfTries < 3)
                 {
-                    Console.WriteLine("\nConfirm your transaction by entering your PIN:");
+                    Console.WriteLine("\nConfirm your transaction by entering your password:");
                     string password_input = Console.ReadLine();
                     if (passwords[userIndex] == password_input)
                     {
-                        Console.WriteLine($"\nTransaction successful!\nWelcome, {usernames[userIndex]}.");
                         return true; // Exit the method on successful login
                     }
                     // WRONG PIN
@@ -370,7 +369,7 @@ namespace Bankomat
                     Console.WriteLine($"Incorrect password. {numberOfTries}/3 tries.");
                 }
                 // THREE WRONG ENTRIES
-                Console.WriteLine("Transaction cancelled due to incorrect password.");
+                Console.WriteLine("\nTransaction cancelled due to incorrect password.");
                 return false; // Consequence of 3 wrong entries
             }
         }
