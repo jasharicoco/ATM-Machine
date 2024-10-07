@@ -329,7 +329,7 @@ namespace Bankomat
 
             ShowAccountsAndBalances(accounts, accountBalances, userIndex);
             Console.WriteLine("\nFrom which account would you like to draw money?");
-            while (!Int32.TryParse(Console.ReadLine(), out fromAccount) || fromAccount < 1 || fromAccount > accounts[userIndex].Length)
+            while (!Int32.TryParse(Console.ReadLine(), out fromAccount) || fromAccount < 1 || fromAccount > accounts[toUser].Length)
             {
                 Console.WriteLine("Choose a valid account.");
             }
