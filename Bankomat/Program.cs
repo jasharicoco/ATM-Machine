@@ -48,7 +48,7 @@ namespace Bankomat
                     switch (choice)
                     {
                         case 1:
-                            Transaction(accounts, accountBalances, userIndex);
+                            Transaction(usernames, passwords, accounts, accountBalances, userIndex);
                             break;
 
                         case 2:
@@ -133,7 +133,7 @@ namespace Bankomat
                 Console.WriteLine($"{i + 1}: {accounts[userIndex][i]}: {accountBalances[userIndex][i]:C}");
             }
         }
-        static void Transaction(string[][] accounts, decimal[][] accountBalances, int userIndex)
+        static void Transaction(string[] usernames, string[] passwords, string[][] accounts, decimal[][] accountBalances, int userIndex)
         {
             ShowAccountsAndBalances(accounts, accountBalances, userIndex);
             Console.WriteLine("\nWould you like to make an internal transaction?\n1. Yes\n2. No");
@@ -350,6 +350,28 @@ namespace Bankomat
                 Console.WriteLine("\nTransaction successful. These are you new balances.");
 
                 ShowAccountsAndBalances(accounts, accountBalances, userIndex);
+            }
+        }
+        static bool ConfirmPIN(string[] usernames, string[] passwords, int userIndex)
+        {
+            {
+                int numberOfTries = 0;
+                while (numberOfTries < 3)
+                {
+                    Console.WriteLine("Confirm your transaction by entering your PIN:");
+                    string password_input = Console.ReadLine();
+                    if (passwords[userIndex] == password_input)
+                    {
+                        Console.WriteLine($"\nTransaction successful!\nWelcome, {usernames[userIndex]}.");
+                        return true; // Exit the method on successful login
+                    }
+                    // WRONG PIN
+                    numberOfTries++;
+                    Console.WriteLine($"Incorrect password. {numberOfTries}/3 tries.");
+                }
+                // THREE WRONG ENTRIES
+                Console.WriteLine("Transaction cancelled due to incorrect password.");
+                return false; // Consequence of 3 wrong entries
             }
         }
     }
