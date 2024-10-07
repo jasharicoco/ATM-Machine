@@ -48,11 +48,11 @@ namespace Bankomat
                     switch (choice)
                     {
                         case 1:
-                            Transaction(accounts, accountBalances, userIndex);
+                            Transaction(usernames, passwords, accounts, accountBalances, userIndex);
                             break;
 
                         case 2:
-                            MakeWithdrawal(accounts, accountBalances, userIndex);
+                            MakeWithdrawal(usernames, passwords, accounts, accountBalances, userIndex);
                             break;
 
                         case 3:
@@ -60,7 +60,7 @@ namespace Bankomat
                             break;
 
                         case 4:
-                            CrossUserTransaction(usernames, accounts, accountBalances, userIndex);
+                            CrossUserTransaction(usernames, passwords, accounts, accountBalances, userIndex);
                             break;
 
                         case 5:
@@ -133,7 +133,7 @@ namespace Bankomat
                 Console.WriteLine($"{i + 1}: {accounts[userIndex][i]}: {accountBalances[userIndex][i]:C}");
             }
         }
-        static void Transaction(string[][] accounts, decimal[][] accountBalances, int userIndex)
+        static void Transaction(string[] usernames, string[] passwords, string[][] accounts, decimal[][] accountBalances, int userIndex)
         {
             ShowAccountsAndBalances(accounts, accountBalances, userIndex);
             Console.WriteLine("\nWould you like to make an internal transaction?\n1. Yes\n2. No");
@@ -183,7 +183,7 @@ namespace Bankomat
                 {
                     Console.WriteLine("\nInsufficient funds in the selected account. Try again.");
                 }
-                else
+                if (ConfirmPIN(usernames, passwords, userIndex))
                 {
                     // Perform the transaction
                     accountBalances[userIndex][fromAccount - 1] -= amount;
@@ -195,7 +195,7 @@ namespace Bankomat
                 }
             }
         }
-        static void MakeWithdrawal(string[][] accounts, decimal[][] accountBalances, int userIndex)
+        static void MakeWithdrawal(string[] usernames, string[] passwords, string[][] accounts, decimal[][] accountBalances, int userIndex)
         {
             int fromAccount = 0;
             decimal amount = 0;
@@ -227,11 +227,14 @@ namespace Bankomat
                         // Check if there are sufficient funds
                         if (accountBalances[userIndex][fromAccount - 1] >= amount)
                         {
-                            // Perform the withdrawal
-                            accountBalances[userIndex][fromAccount - 1] -= amount;
-                            Console.WriteLine("\nWITHDRAWAL SUCCESSFUL.");
+                            if (ConfirmPIN(usernames, passwords, userIndex))
+                            {
+                                // Perform the withdrawal
+                                accountBalances[userIndex][fromAccount - 1] -= amount;
+                                Console.WriteLine("\nWITHDRAWAL SUCCESSFUL.");
 
-                            ShowAccountsAndBalances(accounts, accountBalances, userIndex);
+                                ShowAccountsAndBalances(accounts, accountBalances, userIndex);
+                            }
                             withdrawalLoop = false;
                             break; // Leave loop when transaction is successful
                         }
@@ -294,7 +297,7 @@ namespace Bankomat
                 }
             }
         }
-        static void CrossUserTransaction(string[] usernames, string[][] accounts, decimal[][] accountBalances, int userIndex)
+        static void CrossUserTransaction(string[] usernames, string[] passwords, string[][] accounts, decimal[][] accountBalances, int userIndex)
         {
             int fromAccount = 0;
             int toUser = 0;
@@ -318,7 +321,7 @@ namespace Bankomat
                 Console.WriteLine($"{i + 1}: {accounts[toUser - 1][i]}");
             }
 
-            while (!Int32.TryParse(Console.ReadLine(), out toAccount) || toAccount < 1 || toAccount > accounts[toUser].Length)
+            while (!Int32.TryParse(Console.ReadLine(), out toAccount) || toAccount < 1 || toAccount > accounts[toUser - 1].Length)
             {
                 Console.WriteLine("Choose a valid account.");
             }
@@ -326,7 +329,7 @@ namespace Bankomat
 
             ShowAccountsAndBalances(accounts, accountBalances, userIndex);
             Console.WriteLine("\nFrom which account would you like to draw money?");
-            while (!Int32.TryParse(Console.ReadLine(), out fromAccount) || fromAccount < 1 || fromAccount > accounts[userIndex].Length)
+            while (!Int32.TryParse(Console.ReadLine(), out fromAccount) || fromAccount < 1 || fromAccount > accounts[toUser - 1].Length)
             {
                 Console.WriteLine("Choose a valid account.");
             }
@@ -341,15 +344,39 @@ namespace Bankomat
             {
                 Console.WriteLine("\nInsufficient funds in the selected account. Try again.");
             }
-            else
+
+            if (ConfirmPIN(usernames, passwords, userIndex))
             {
                 // Perform the transaction
                 accountBalances[userIndex][fromAccount - 1] -= amount;
                 accountBalances[toUser - 1][toAccount - 1] += amount;
 
-                Console.WriteLine("\nTransaction successful. These are you new balances.");
+                Console.WriteLine($"\nTransaction successful. {amount} was sent from your {accounts[userIndex][fromAccount - 1]} " +
+                    $"to {usernames[toUser - 1]}'s {accounts[toUser - 1][toAccount - 1]}.");
+                Console.WriteLine("\nThese are you new balances.");
 
                 ShowAccountsAndBalances(accounts, accountBalances, userIndex);
+            }
+        }
+        static bool ConfirmPIN(string[] usernames, string[] passwords, int userIndex)
+        {
+            {
+                int numberOfTries = 0;
+                while (numberOfTries < 3)
+                {
+                    Console.WriteLine("\nConfirm your transaction by entering your password:");
+                    string password_input = Console.ReadLine();
+                    if (passwords[userIndex] == password_input)
+                    {
+                        return true; // Exit the method on successful login
+                    }
+                    // WRONG PIN
+                    numberOfTries++;
+                    Console.WriteLine($"Incorrect password. {numberOfTries}/3 tries.");
+                }
+                // THREE WRONG ENTRIES
+                Console.WriteLine("\nTransaction cancelled due to incorrect password.");
+                return false; // Consequence of 3 wrong entries
             }
         }
     }
