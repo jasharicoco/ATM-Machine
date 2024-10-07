@@ -36,7 +36,6 @@ namespace Bankomat
             bool program = true;
             while (program)
             {
-                Console.WriteLine("");
                 Console.WriteLine("\x1b[1mDear customer. Welcome to our ATM Machine.\x1b[0m");
 
                 Login(usernames, passwords, ref userIndex);
@@ -314,12 +313,12 @@ namespace Bankomat
             }
 
             Console.WriteLine("\nTo which account would you like to transfer the money?");
-            for (int i = 0; i < accounts[toUser].Length; i++)
+            for (int i = 0; i < accounts[toUser - 1].Length; i++)
             {
-                Console.WriteLine($"{i + 1}: {accounts[toUser][i]}");
+                Console.WriteLine($"{i + 1}: {accounts[toUser - 1][i]}");
             }
 
-            while (!Int32.TryParse(Console.ReadLine(), out toAccount) || toAccount < 1 || toAccount > accounts.Length)
+            while (!Int32.TryParse(Console.ReadLine(), out toAccount) || toAccount < 1 || toAccount > accounts[toUser].Length)
             {
                 Console.WriteLine("Choose a valid account.");
             }
@@ -327,7 +326,7 @@ namespace Bankomat
 
             ShowAccountsAndBalances(accounts, accountBalances, userIndex);
             Console.WriteLine("\nFrom which account would you like to draw money?");
-            while (!Int32.TryParse(Console.ReadLine(), out fromAccount) || fromAccount < 1 || fromAccount > accounts.Length)
+            while (!Int32.TryParse(Console.ReadLine(), out fromAccount) || fromAccount < 1 || fromAccount > accounts[userIndex].Length)
             {
                 Console.WriteLine("Choose a valid account.");
             }
@@ -338,7 +337,7 @@ namespace Bankomat
                 Console.WriteLine("Enter a valid amount.");
             }
 
-            if (accountBalances[userIndex][fromAccount] < amount)
+            if (accountBalances[userIndex][fromAccount - 1] < amount)
             {
                 Console.WriteLine("\nInsufficient funds in the selected account. Try again.");
             }
