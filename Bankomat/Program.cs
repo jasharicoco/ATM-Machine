@@ -321,7 +321,7 @@ namespace Bankomat
                 Console.WriteLine($"{i + 1}: {accounts[toUser - 1][i]}");
             }
 
-            while (!Int32.TryParse(Console.ReadLine(), out toAccount) || toAccount < 1 || toAccount > accounts[toUser].Length)
+            while (!Int32.TryParse(Console.ReadLine(), out toAccount) || toAccount < 1 || toAccount > accounts[toUser - 1].Length)
             {
                 Console.WriteLine("Choose a valid account.");
             }
@@ -329,7 +329,7 @@ namespace Bankomat
 
             ShowAccountsAndBalances(accounts, accountBalances, userIndex);
             Console.WriteLine("\nFrom which account would you like to draw money?");
-            while (!Int32.TryParse(Console.ReadLine(), out fromAccount) || fromAccount < 1 || fromAccount > accounts[toUser].Length)
+            while (!Int32.TryParse(Console.ReadLine(), out fromAccount) || fromAccount < 1 || fromAccount > accounts[toUser - 1].Length)
             {
                 Console.WriteLine("Choose a valid account.");
             }
@@ -351,7 +351,9 @@ namespace Bankomat
                 accountBalances[userIndex][fromAccount - 1] -= amount;
                 accountBalances[toUser - 1][toAccount - 1] += amount;
 
-                Console.WriteLine("\nTransaction successful. These are you new balances.");
+                Console.WriteLine($"\nTransaction successful. {amount} was sent from your {accounts[userIndex][fromAccount - 1]} " +
+                    $"to {usernames[toUser - 1]}'s {accounts[toUser - 1][toAccount - 1]}.");
+                Console.WriteLine("\nThese are you new balances.");
 
                 ShowAccountsAndBalances(accounts, accountBalances, userIndex);
             }
