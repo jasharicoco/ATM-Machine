@@ -358,7 +358,7 @@ namespace Bankomat
                 int numberOfTries = 0;
                 while (numberOfTries < 3)
                 {
-                    Console.WriteLine("Confirm your transaction by entering your PIN:");
+                    Console.WriteLine("\nConfirm your transaction by entering your PIN:");
                     string password_input = Console.ReadLine();
                     if (passwords[userIndex] == password_input)
                     {
