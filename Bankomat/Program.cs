@@ -9,15 +9,15 @@ namespace Bankomat
         static void Main(string[] args)
         {
             // USERNAME AND PASSWORD STORAGE
-            string[] usernames = { "a", "user2", "user3", "user4", "user5" };
-            string[] passwords = { "a", "password2", "password3", "password4", "password5" };
+            string[] usernames = { "Adam", "Filip", "Petter", "Daniel", "Alex" };
+            string[] passwords = { "adam", "filip", "petter", "daniel", "alex" };
 
             // ACCOUNTS & BALANCE STORAGE
             string[][] accounts =
             {
                 new string[] { "CHECKING ACCOUNT", "SAVINGS ACCCOUNT", "BROKERAGE ACCOUNT" },   // user1
-                new string[] { "CHECKING ACCOUNT", "SAVINGS ACCCOUNT", "FAMILY ACCOUNT" },      // user2
-                new string[] { "BROKERAGE ACCOUNT", "PENSION SAVINGS" },                        // user3
+                new string[] { "CHECKING ACCOUNT", "SAVINGS ACCCOUNT" },                        // user2
+                new string[] { "BROKERAGE ACCOUNT" },                                           // user3
                 new string[] { "CHECKING ACCOUNT", "SAVINGS ACCCOUNT", "BROKERAGE ACCOUNT" },   // user4
                 new string[] { "CHECKING ACCOUNT", "SAVINGS ACCCOUNT" },                        // user5
             };
