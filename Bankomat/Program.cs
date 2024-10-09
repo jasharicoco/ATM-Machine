@@ -312,7 +312,8 @@ namespace Bankomat
             int toAccount = 0;
             decimal amount = 0;
 
-            Console.WriteLine("\nTo which user would you like to send money?");
+            Console.Clear();
+            Console.WriteLine("To which user would you like to send money?");
             for (int i = 0; i < usernames.Length; i++)
             {
                 Console.WriteLine($"{i + 1}: {usernames[i]}");
@@ -421,7 +422,6 @@ namespace Bankomat
                     Console.Write('*');
                 }
             }
-
             return password;
         }
     }
