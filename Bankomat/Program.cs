@@ -169,7 +169,8 @@ namespace Bankomat
 
             if (fromAccount == toAccount)
             {
-                Console.WriteLine("\nYou cannot make a transaction from/to the same account. Try again.");
+                Console.Clear();
+                Console.WriteLine("You cannot make a transaction from/to the same account. Try again.");
                 return; // Exit the method if accounts are the same
             }
 
@@ -220,12 +221,6 @@ namespace Bankomat
                     Console.WriteLine("\nHow much would you like to withdraw?");
                     string input = Console.ReadLine();
 
-                    if (input.ToUpper() == "EXIT")
-                    {
-                        Console.WriteLine("\nTransaction cancelled. Returning to menu.");
-                        return;
-                    }
-
                     if (decimal.TryParse(input, out amount) && amount > 0)
                     {
                         // Check if there are sufficient funds
@@ -246,13 +241,14 @@ namespace Bankomat
                         }
                         else
                         {
-                            Console.WriteLine("Insufficient funds. Try again or write EXIT to cancel.");
-                            continue;
+                            Console.Clear();
+                            Console.WriteLine("Insufficient funds in the selected account. Try again.");
+                            return;
                         }
                     }
                     else
                     {
-                        Console.WriteLine("Enter a valid amount. Try again or write EXIT to cancel.");
+                        Console.WriteLine("Enter a valid amount.");
                     }
                 }
             }
@@ -280,12 +276,6 @@ namespace Bankomat
                     Console.WriteLine("\nHow much would you like to deposit?");
                     string input = Console.ReadLine();
 
-                    if (input.ToUpper() == "EXIT")
-                    {
-                        Console.WriteLine("\nTransaction cancelled. Returning to menu.");
-                        return;
-                    }
-
                     if (decimal.TryParse(input, out amount) && amount > 0)
                     {
                         // Perform the withdrawal
@@ -300,7 +290,7 @@ namespace Bankomat
                     }
                     else
                     {
-                        Console.WriteLine("Enter a valid amount. Try again or write EXIT to cancel.");
+                        Console.WriteLine("Enter a valid amount.");
                     }
                 }
             }
@@ -316,10 +306,13 @@ namespace Bankomat
             Console.WriteLine("To which user would you like to send money?");
             for (int i = 0; i < usernames.Length; i++)
             {
-                Console.WriteLine($"{i + 1}: {usernames[i]}");
+                if (i != userIndex) // Exclude the logged in user from the list...
+                {
+                    Console.WriteLine($"{i + 1}: {usernames[i]}");
+                }
             }
 
-            while (!Int32.TryParse(Console.ReadLine(), out toUser) || toUser < 1 || toUser > usernames.Length)
+            while (!Int32.TryParse(Console.ReadLine(), out toUser) || toUser < 1 || toUser > usernames.Length || toUser == userIndex + 1)
             {
                 Console.WriteLine("Choose a valid user.");
             }
@@ -350,10 +343,11 @@ namespace Bankomat
 
             if (balances[userIndex][fromAccount - 1] < amount)
             {
-                Console.WriteLine("\nInsufficient funds in the selected account. Try again.");
+                Console.Clear();
+                Console.WriteLine("Insufficient funds in the selected account. Try again.");
             }
 
-            if (ConfirmPIN(usernames, passwords, userIndex))
+            else if (ConfirmPIN(usernames, passwords, userIndex))
             {
                 // Perform the transaction
                 balances[userIndex][fromAccount - 1] -= amount;
