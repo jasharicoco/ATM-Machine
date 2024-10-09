@@ -181,9 +181,11 @@ namespace Bankomat
 
             if (balances[userIndex][fromAccount - 1] < amount)
             {
-                Console.WriteLine("\nInsufficient funds in the selected account. Try again.");
+                Console.Clear();
+                Console.WriteLine("Insufficient funds in the selected account. Try again.");
             }
-            if (ConfirmPIN(usernames, passwords, userIndex))
+
+            else if (ConfirmPIN(usernames, passwords, userIndex))
             {
                 // Perform the transaction
                 balances[userIndex][fromAccount - 1] -= amount;
@@ -376,7 +378,7 @@ namespace Bankomat
                     }
                     // WRONG PIN
                     numberOfTries++;
-                    Console.WriteLine($"Incorrect password. {numberOfTries}/3 tries.");
+                    Console.WriteLine($"\nIncorrect password. {numberOfTries}/3 tries.");
                 }
                 // THREE WRONG ENTRIES
                 Console.Clear();
@@ -386,6 +388,8 @@ namespace Bankomat
         }
         static string ReadPassword()
         {
+            //This method is straight up copy-paste from the web. I have implemented it's function, and I understand how it works.
+            //However, I could not have written this from scratch. Not yet.
             string password = string.Empty;
 
             while (true)
