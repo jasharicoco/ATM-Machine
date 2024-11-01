@@ -6,15 +6,13 @@ namespace Bankomat
 {
     internal class Program
     {
-        static void Main(string[] args)
-        {
-            // USERNAME AND PASSWORD STORAGE
-            string[] usernames = { "Adam", "Filip", "Petter", "Daniel", "Alex" };
-            string[] passwords = { "adam", "filip", "petter", "daniel", "alex" };
+        // USERNAME AND PASSWORD STORAGE
+        static string[] usernames = { "Adam", "Filip", "Petter", "Daniel", "Alex" };
+        static string[] passwords = { "adam", "filip", "petter", "daniel", "alex" };
 
-            // ACCOUNTS & BALANCE STORAGE
-            string[][] accounts =
-            {
+        // ACCOUNTS & BALANCE STORAGE
+        static string[][] accounts =
+        {
                 new string[] { "CHECKING ACCOUNT", "SAVINGS ACCCOUNT", "BROKERAGE ACCOUNT" },   // user1
                 new string[] { "CHECKING ACCOUNT", "SAVINGS ACCCOUNT" },                        // user2
                 new string[] { "BROKERAGE ACCOUNT" },                                           // user3
@@ -22,14 +20,16 @@ namespace Bankomat
                 new string[] { "CHECKING ACCOUNT", "SAVINGS ACCCOUNT" },                        // user5
             };
 
-            decimal[][] balances =
-            {
+        static decimal[][] balances =
+        {
                 new decimal[] { 100000m, 500000.69m, -1000m },  // user1
                 new decimal[] { 200000m, 10000m },              // user2
                 new decimal[] { 1000000m },                     // user3
                 new decimal[] { 4500m, 90000m, 5000.86m },      // user4
                 new decimal[] { 3000m, 2000m }                  // user5
             };
+        static void Main(string[] args)
+        {
 
             int userIndex = 0; // This will represent the index of our logged in user
 
@@ -39,7 +39,7 @@ namespace Bankomat
                 Console.Clear();
                 Console.WriteLine("\x1b[1mDear customer. Welcome to our ATM Machine.\x1b[0m");
 
-                Login(usernames, passwords, ref userIndex);
+                Login(ref userIndex);
 
                 bool loggedin = true;
                 while (loggedin)
@@ -49,19 +49,19 @@ namespace Bankomat
                     switch (choice)
                     {
                         case 1:
-                            Transaction(usernames, passwords, accounts, balances, userIndex);
+                            Transaction(userIndex);
                             break;
 
                         case 2:
-                            MakeWithdrawal(usernames, passwords, accounts, balances, userIndex);
+                            MakeWithdrawal(userIndex);
                             break;
 
                         case 3:
-                            MakeDeposit(accounts, balances, userIndex);
+                            MakeDeposit(userIndex);
                             break;
 
                         case 4:
-                            CrossUserTransaction(usernames, passwords, accounts, balances, userIndex);
+                            CrossUserTransaction(userIndex);
                             break;
 
                         case 5:
@@ -70,7 +70,7 @@ namespace Bankomat
                             Console.ReadKey();
                             break;
 
-                            case 6:
+                        case 6:
                             Environment.Exit(0);
                             break;
 
@@ -84,7 +84,7 @@ namespace Bankomat
         }
 
         // METHOD STORAGE
-        static void Login(string[] usernames, string[] passwords, ref int userIndex)
+        static void Login(ref int userIndex)
         {
             int numberOfTries = 0;
             while (numberOfTries < 3)
@@ -138,7 +138,7 @@ namespace Bankomat
             Console.WriteLine("5. Log out");
             Console.WriteLine("6. Exit the application");
         }
-        static void ShowAccountsAndBalances(string[][] accounts, decimal[][] balances, int userIndex)
+        static void ShowAccountsAndBalances(int userIndex)
         {
             Console.WriteLine("These are your accounts and their respective balances.");
             for (int i = 0; i < accounts[userIndex].Length; i++)
@@ -146,10 +146,10 @@ namespace Bankomat
                 Console.WriteLine($"{i + 1}: {accounts[userIndex][i]}: {balances[userIndex][i]:C}");
             }
         }
-        static void Transaction(string[] usernames, string[] passwords, string[][] accounts, decimal[][] balances, int userIndex)
+        static void Transaction(int userIndex)
         {
             Console.Clear();
-            ShowAccountsAndBalances(accounts, balances, userIndex);
+            ShowAccountsAndBalances(userIndex);
 
             int fromAccount = 0;
             int toAccount = 0;
@@ -186,7 +186,7 @@ namespace Bankomat
                 Console.WriteLine("Insufficient funds in the selected account. Try again.");
             }
 
-            else if (ConfirmPIN(usernames, passwords, userIndex))
+            else if (ConfirmPIN(userIndex))
             {
                 // Perform the transaction
                 balances[userIndex][fromAccount - 1] -= amount;
@@ -199,13 +199,13 @@ namespace Bankomat
                 Console.WriteLine($"New balance for {accounts[userIndex][toAccount - 1]}: {balances[userIndex][toAccount - 1].ToString("C")}");
             }
         }
-        static void MakeWithdrawal(string[] usernames, string[] passwords, string[][] accounts, decimal[][] balances, int userIndex)
+        static void MakeWithdrawal(int userIndex)
         {
             int fromAccount = 0;
             decimal amount = 0;
 
             Console.Clear();
-            ShowAccountsAndBalances(accounts, balances, userIndex);
+            ShowAccountsAndBalances(userIndex);
             bool withdrawalLoop = true;
             while (withdrawalLoop)
             {
@@ -226,7 +226,7 @@ namespace Bankomat
                         // Check if there are sufficient funds
                         if (balances[userIndex][fromAccount - 1] >= amount)
                         {
-                            if (ConfirmPIN(usernames, passwords, userIndex))
+                            if (ConfirmPIN(userIndex))
                             {
                                 // Perform the withdrawal
                                 balances[userIndex][fromAccount - 1] -= amount;
@@ -253,13 +253,13 @@ namespace Bankomat
                 }
             }
         }
-        static void MakeDeposit(string[][] accounts, decimal[][] balances, int userIndex)
+        static void MakeDeposit(int userIndex)
         {
             int toAccount = 0;
             decimal amount = 0;
 
             Console.Clear();
-            ShowAccountsAndBalances(accounts, balances, userIndex);
+            ShowAccountsAndBalances(userIndex);
             bool depositLoop = true;
             while (depositLoop)
             {
@@ -295,7 +295,7 @@ namespace Bankomat
                 }
             }
         }
-        static void CrossUserTransaction(string[] usernames, string[] passwords, string[][] accounts, decimal[][] balances, int userIndex)
+        static void CrossUserTransaction(int userIndex)
         {
             int fromAccount = 0;
             int toUser = 0;
@@ -329,7 +329,7 @@ namespace Bankomat
             }
 
             Console.WriteLine("\nFrom which account would you like to draw money?\n");
-            ShowAccountsAndBalances(accounts, balances, userIndex);
+            ShowAccountsAndBalances(userIndex);
             while (!Int32.TryParse(Console.ReadLine(), out fromAccount) || fromAccount < 1 || fromAccount > accounts[userIndex].Length)
             {
                 Console.WriteLine("Choose a valid account.");
@@ -347,7 +347,7 @@ namespace Bankomat
                 Console.WriteLine("Insufficient funds in the selected account. Try again.");
             }
 
-            else if (ConfirmPIN(usernames, passwords, userIndex))
+            else if (ConfirmPIN(userIndex))
             {
                 // Perform the transaction
                 balances[userIndex][fromAccount - 1] -= amount;
@@ -359,7 +359,7 @@ namespace Bankomat
                 Console.WriteLine($"New balance for {accounts[userIndex][fromAccount - 1]}: {balances[userIndex][fromAccount - 1].ToString("C")}");
             }
         }
-        static bool ConfirmPIN(string[] usernames, string[] passwords, int userIndex)
+        static bool ConfirmPIN(int userIndex)
         {
             {
                 int numberOfTries = 0;
